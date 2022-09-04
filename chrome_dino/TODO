@@ -1,0 +1,3 @@
+// DataBase
+distancia do pulo || tamanho do obstaculo || sucesso || velocidade ||
+     float                   float             bool        float
