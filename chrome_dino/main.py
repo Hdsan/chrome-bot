@@ -5,6 +5,7 @@ import mss
 import cv2
 import statistics
 from PIL import ImageGrab
+from csv import writer
 
 alive = True
 threshold = 0.9
@@ -60,11 +61,13 @@ def set_references():
     start = time.time()
     dino = cv2.imread('images/dino.png')
     while(not has_timed_out):
+      print("procurando Dino")
       matches = positions(dino)
       if(len(matches)==0):
        has_timed_out = time.time()-start > timeout
        continue
-     
+      
+      print("Dino")
       x,y,w,h = matches[0]
       XDino = x+w/2
       YDino = y+h/2
@@ -132,8 +135,10 @@ def detect_enemy(screen):
         # 50 pixels de tolerancia
         if color[1] <  whitePixel[1]-50 :
          
-           print(color,whitePixel)
+          # print(color,whitePixel)
            jump()
+           array = [x,0,10,12,0,1,0]
+           write_database(array)
            break
            
      #verificação de ameaça aérea
@@ -142,11 +147,23 @@ def detect_enemy(screen):
         # 50 pixels de tolerancia
         if color[1] <  whitePixel[1]-50 :
           # pyautogui.moveTo(x,YPtero)
-           print(color,whitePixel)
+          # print(color,whitePixel)
            crouch()
+           array = [0,x,10,15,1,0,1]
+           write_database(array)
            break
-                           
+           
+           
+def write_database(row):
+   with open('dino_database.csv', 'a') as database:
 
+    writer_database = writer(database)
+
+    writer_database.writerow(row)
+
+    database.close()
+
+    
 # Dino Jumps
 def jump():
     global XGround
